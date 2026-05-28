@@ -32,6 +32,47 @@ jobs:
       - name: Validate Kubernetes manifest (dry-run)
         run: kubectl apply --dry-run=client -f deploymentservice.yml
 
+  terraform-plan:
+    name: Terraform Plan (infra)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
+    env:
+      TF_VAR_dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
+      TF_VAR_dockerhub_token: ${{ secrets.DOCKER_PASSWORD }}
+      TF_VAR_kube_context: ${{ secrets.KUBE_CONTEXT }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.6"
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="region=${{ secrets.TF_STATE_REGION }}" \
+            -backend-config="encrypt=true"
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -no-color
+        continue-on-error: false
+
   build-test-push:
     name: Build, Test & Push Image
     runs-on: ubuntu-latest
