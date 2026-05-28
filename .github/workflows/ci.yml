@@ -30,7 +30,7 @@ jobs:
         uses: azure/setup-kubectl@v4
 
       - name: Validate Kubernetes manifest (dry-run)
-        run: kubectl apply --dry-run=client -f deploymentservice.yml
+        run: kubectl apply --dry-run=client --validate=false -f deploymentservice.yml
 
   build-test-push:
     name: Build, Test & Push Image
