@@ -2,7 +2,7 @@ name: Infra Provision
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
     paths:
       - 'infra/**'
   workflow_dispatch:
@@ -10,7 +10,7 @@ on:
       action:
         description: Terraform action to run
         required: true
-        default: plan
+        default: apply
         type: choice
         options:
           - plan
@@ -39,27 +39,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "~1.6"
-
       - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
           printf '%s' "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
-
-      - name: Verify cluster is reachable
-        run: |
-          if ! kubectl cluster-info --request-timeout=10s > /dev/null 2>&1; then
-            echo "::error::Kubernetes cluster is not reachable. Provision the cluster first, then re-run this workflow."
-            exit 1
-          fi
-          echo "Cluster is reachable."
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.6"
 
       - name: Terraform Init
         run: |
@@ -74,19 +63,29 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -out=tfplan -detailed-exitcode
+        run: terraform plan -out=tfplan -detailed-exitcode -no-color
         continue-on-error: true
 
       - name: Fail on plan error
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
+      - name: No changes detected
+        if: steps.plan.outputs.exitcode == '0'
+        run: echo "Infrastructure is up to date. Nothing to apply."
+
       - name: Terraform Apply
         if: >
           steps.plan.outputs.exitcode == '2' &&
           (github.event_name == 'push' ||
            github.event.inputs.action == 'apply')
-        run: terraform apply -auto-approve tfplan
+        run: |
+          echo "Deploying infrastructure changes..."
+          terraform apply -auto-approve tfplan
+
+      - name: Terraform Plan only
+        if: github.event.inputs.action == 'plan'
+        run: echo "Plan complete. No apply requested."
 
       - name: Terraform Destroy
         if: github.event.inputs.action == 'destroy'
