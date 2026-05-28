@@ -22,7 +22,7 @@ spec:
         runAsUser: 1000
       containers:
         - name: shopping-cart
-          image: ghcr.io/captcloud01/shopping-cart:latest
+          image: captcloud01/shopping-cart:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8070
