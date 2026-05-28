@@ -15,16 +15,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Assert required infra files exist
+      - name: Assert required files exist
         run: |
           missing=()
-          [ -f Dockerfile ] || missing+=("Dockerfile")
-          [ -f deploymentservice.yml ] || missing+=("deploymentservice.yml")
+          [ -f app/Dockerfile ] || missing+=("app/Dockerfile")
+          [ -f infra/deploymentservice.yml ] || missing+=("infra/deploymentservice.yml")
           if [ ${#missing[@]} -gt 0 ]; then
-            echo "Missing required infra files: ${missing[*]}"
+            echo "Missing required files: ${missing[*]}"
             exit 1
           fi
-          echo "All required infra files present."
+          echo "All required files present."
 
       - name: Install kubeconform
         run: |
@@ -32,7 +32,7 @@ jobs:
             | tar xz -C /usr/local/bin kubeconform
 
       - name: Validate Kubernetes manifest
-        run: kubeconform -strict -summary deploymentservice.yml
+        run: kubeconform -strict -summary infra/deploymentservice.yml
 
   build-test-push:
     name: Build, Test & Push Image
@@ -50,6 +50,7 @@ jobs:
           cache: maven
 
       - name: Run Maven tests
+        working-directory: app
         run: mvn clean verify -Dmaven.test.failure.ignore=false
 
       - name: Log in to Docker Hub
@@ -60,7 +61,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/shopping-cart:pr-${{ github.event.number }} .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/shopping-cart:pr-${{ github.event.number }} app/
 
       - name: Smoke-test the image
         run: |
