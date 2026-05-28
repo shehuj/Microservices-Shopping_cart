@@ -45,17 +45,6 @@ jobs:
           printf '%s' "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
-
-      - name: Verify cluster is reachable
-        run: |
-          if ! kubectl cluster-info --request-timeout=10s > /dev/null 2>&1; then
-            echo "::error::Kubernetes cluster is not reachable. Provision the cluster first, then re-run this workflow."
-            exit 1
-          fi
-          echo "Cluster is reachable."
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
