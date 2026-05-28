@@ -53,7 +53,7 @@ jobs:
         run: |
           terraform init \
             -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
-            -backend-config="key=shopping-cart/terraform.tfstate" \
+            -backend-config="key=shopping-cart/k8s/terraform.tfstate" \
             -backend-config="region=${{ secrets.TF_STATE_REGION }}" \
             -backend-config="encrypt=true"
 
