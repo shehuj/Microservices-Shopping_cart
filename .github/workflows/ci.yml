@@ -28,8 +28,19 @@ jobs:
       - name: Configure kubeconfig
         run: |
           mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          printf '%s' "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Verify cluster is reachable
+        run: |
+          if ! kubectl cluster-info --request-timeout=10s > /dev/null 2>&1; then
+            echo "::error::Kubernetes cluster is not reachable. Run the Infra Provision workflow manually first to provision the cluster, then retry."
+            exit 1
+          fi
+          echo "Cluster is reachable."
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
