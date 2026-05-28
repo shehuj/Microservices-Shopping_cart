@@ -1,13 +1,13 @@
-variable "kubeconfig_path" {
-  description = "Path to the kubeconfig file."
+variable "aws_region" {
+  description = "AWS region."
   type        = string
-  default     = "~/.kube/config"
+  default     = "us-east-1"
 }
 
-variable "kube_context" {
-  description = "Kubernetes context to use from the kubeconfig."
+variable "cluster_name" {
+  description = "EKS cluster name to manage resources on."
   type        = string
-  default     = ""
+  default     = "shopping-cart-eks"
 }
 
 variable "namespace" {
