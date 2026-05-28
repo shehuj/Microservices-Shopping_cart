@@ -85,4 +85,4 @@ App runs on **port 8070**.
 | `AWS_ACCESS_KEY_ID` | CI (infra apply), Infra (S3 state) |
 | `AWS_SECRET_ACCESS_KEY` | CI (infra apply), Infra (S3 state) |
 | `TF_STATE_BUCKET` | CI (infra apply), Infra |
-| `TF_STATE_REGION` | CI (infra apply), Infra |
+| `AWS_REGION` | CI (infra apply), Infra |
