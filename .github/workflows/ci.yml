@@ -26,11 +26,13 @@ jobs:
           fi
           echo "All required infra files present."
 
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v4
+      - name: Install kubeconform
+        run: |
+          curl -sL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz \
+            | tar xz -C /usr/local/bin kubeconform
 
-      - name: Validate Kubernetes manifest (dry-run)
-        run: kubectl apply --dry-run=client --validate=false -f deploymentservice.yml
+      - name: Validate Kubernetes manifest
+        run: kubeconform -strict -summary deploymentservice.yml
 
   build-test-push:
     name: Build, Test & Push Image
