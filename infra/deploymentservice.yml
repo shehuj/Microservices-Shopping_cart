@@ -3,48 +3,62 @@ kind: Deployment
 metadata:
   name: shopping-cart-deployment
   namespace: shopping-cart
+
 spec:
+  replicas: 2
+  progressDeadlineSeconds: 300
+
   selector:
     matchLabels:
       app: shopping-cart
       tier: backend
       phase: production
       deployment: v1
-  replicas: 2
-  progressDeadlineSeconds: 300
+
   template:
     metadata:
       labels:
         app: shopping-cart
-      annotations:
-        seccomp.security.alpha.kubernetes.io/pod: runtime/default
+        tier: backend
+        phase: production
+        deployment: v1
+
     spec:
       automountServiceAccountToken: false
+
       imagePullSecrets:
         - name: dockerhub-credentials
+
       securityContext:
-        seccompProfile:
-          type: RuntimeDefault
         runAsNonRoot: true
         runAsUser: 10000
+        seccompProfile:
+          type: RuntimeDefault
+
       containers:
         - name: shopping-cart
+
           image: trusted-repo/shopping-cart:__TAG__
           imagePullPolicy: Always
+
           ports:
             - containerPort: 8070
+
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
-              drop: [ALL]
+              drop:
+                - ALL
+
           resources:
             requests:
-              memory: "256Mi"
               cpu: "250m"
+              memory: "256Mi"
             limits:
-              memory: "512Mi"
               cpu: "500m"
+              memory: "512Mi"
+
           readinessProbe:
             httpGet:
               path: /
@@ -52,6 +66,7 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 10
             failureThreshold: 6
+
           livenessProbe:
             httpGet:
               path: /
@@ -60,20 +75,36 @@ spec:
             periodSeconds: 15
             failureThreshold: 3
 
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+
+      volumes:
+        - name: tmp-volume
+          emptyDir: {}
+
 ---
 
 apiVersion: v1
 kind: Service
+
 metadata:
   name: shopping-cart-svc
   namespace: shopping-cart
+
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+
 spec:
+  type: LoadBalancer
+
   selector:
     app: shopping-cart
+    tier: backend
+    phase: production
+    deployment: v1
+
   ports:
     - protocol: TCP
       port: 8070
       targetPort: 8070
-  type: LoadBalancer
