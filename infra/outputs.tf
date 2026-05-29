@@ -10,11 +10,11 @@ output "image_pull_secret" {
 
 output "app_url" {
   description = "Public HTTPS URL for the shopping cart app."
-  value       = "https://shop.claudiq.com"
+  value       = "https://mallamshehusuya.com"
 }
 
 output "certificate_arn" {
-  description = "ARN of the ACM certificate for shop.claudiq.com."
+  description = "ARN of the ACM certificate for mallamshehusuya.com."
   value       = aws_acm_certificate.app.arn
 }
 
