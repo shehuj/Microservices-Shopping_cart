@@ -7,6 +7,9 @@ spec:
   selector:
     matchLabels:
       app: shopping-cart
+      tier: backend
+      phase: production
+      deployment: v1
   replicas: 2
   progressDeadlineSeconds: 300
   template:
@@ -23,16 +26,16 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         runAsNonRoot: true
-        runAsUser: 1000
+        runAsUser: 10000
       containers:
         - name: shopping-cart
-          image: captcloud01/shopping-cart:__TAG__
+          image: trusted-repo/shopping-cart:__TAG__
           imagePullPolicy: Always
           ports:
             - containerPort: 8070
           securityContext:
             allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: false
+            readOnlyRootFilesystem: true
             capabilities:
               drop: [ALL]
           resources:
@@ -64,6 +67,8 @@ kind: Service
 metadata:
   name: shopping-cart-svc
   namespace: shopping-cart
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
 spec:
   selector:
     app: shopping-cart
