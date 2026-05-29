@@ -83,25 +83,3 @@ spec:
         - name: tmp-volume
           emptyDir: {}
 
----
-
-apiVersion: v1
-kind: Service
-
-metadata:
-  name: shopping-cart-svc
-  namespace: shopping-cart
-
-spec:
-  type: LoadBalancer
-
-  selector:
-    app: shopping-cart
-    tier: backend
-    phase: production
-    deployment: v1
-
-  ports:
-    - protocol: TCP
-      port: 8070
-      targetPort: 8070

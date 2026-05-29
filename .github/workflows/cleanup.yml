@@ -38,13 +38,11 @@ jobs:
             --region ${{ secrets.AWS_REGION }} \
             --name shopping-cart-eks
 
-      - name: Delete deployment and service
+      - name: Delete deployment
         run: |
           kubectl delete deployment shopping-cart-deployment \
             -n shopping-cart --ignore-not-found=true
-          kubectl delete service shopping-cart-svc \
-            -n shopping-cart --ignore-not-found=true
-          echo "App resources deleted."
+          echo "Deployment deleted."
 
   destroy-k8s-infra:
     name: "2 · Destroy Kubernetes Infra (Terraform)"
