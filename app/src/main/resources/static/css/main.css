@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary:      #FF6B35;
-  --primary-dark: #e55a24;
-  --secondary:    #2C3E50;
-  --bg:           #FFF8F0;
-  --card-bg:      #FFFFFF;
-  --muted:        #7F8C8D;
-  --border:       #F0E8DF;
-  --shadow:       0 4px 20px rgba(0,0,0,0.08);
+  --primary:      #C8520F;   /* grill ember */
+  --primary-dark: #A44009;   /* deep ember */
+  --secondary:    #2A1508;   /* espresso charcoal */
+  --bg:           #F5EAD8;   /* kraft parchment */
+  --card-bg:      #FEF6EC;   /* warm cream */
+  --muted:        #8B7055;   /* mocha ash */
+  --border:       #DCC4A0;   /* caramel tan */
+  --shadow:       0 4px 20px rgba(42,21,8,0.10);
   --radius:       14px;
 }
 
@@ -89,7 +89,7 @@ body {
 
 /* ── Hero ────────────────────────────────────────── */
 .qb-hero {
-  background: linear-gradient(135deg, var(--secondary) 0%, #3d5166 100%);
+  background: linear-gradient(135deg, #1A0A04 0%, #3D1C0A 55%, #5E2E10 100%);
   color: #fff;
   text-align: center;
   padding: 3.5rem 1rem 2.5rem;
@@ -146,8 +146,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4rem;
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  font-size: 4.5rem;
+  background: linear-gradient(135deg, #4a1e08 0%, #7a3510 50%, #b05520 100%);
+  filter: drop-shadow(0 0 6px rgba(200,82,15,0.35));
 }
 
 .food-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; }
