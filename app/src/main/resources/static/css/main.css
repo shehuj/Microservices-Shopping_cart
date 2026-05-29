@@ -23,6 +23,29 @@ body {
   flex-direction: column;
 }
 
+/* ── Top Info Bar ────────────────────────────────── */
+.qb-topbar {
+  background: #1A0A04;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.78rem;
+  padding: 0.4rem 1.5rem;
+}
+
+.qb-topbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.qb-topbar a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.qb-topbar a:hover { text-decoration: underline; }
+
 /* ── Navbar ──────────────────────────────────────── */
 .qb-nav {
   background: var(--secondary);

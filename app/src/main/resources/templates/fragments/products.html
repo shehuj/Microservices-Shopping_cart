@@ -21,7 +21,7 @@
       </div>
 
       <div class="food-footer">
-        <span class="food-price" th:text="'₦' + ${#numbers.formatDecimal(product.price, 1, 0)}">₦0</span>
+        <span class="food-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}">$0.00</span>
 
         <a th:href="@{'/shoppingCart/addProduct/{id}'(id=${product.id})}"
            sec:authorize="isAuthenticated()"
