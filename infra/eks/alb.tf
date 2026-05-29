@@ -66,15 +66,34 @@ resource "helm_release" "alb_controller" {
   namespace  = "kube-system"
   version    = "1.7.2"
 
-  values = {
-    clusterName                                      = aws_eks_cluster.main.name
-    serviceAccount.create                            = true
-    serviceAccount.name                              = "aws-load-balancer-controller"
-    serviceAccount.annotations = {
-      "eks.amazonaws.com/role-arn"                   = aws_iam_role.alb_controller.arn
-    }
-    region                                           = var.aws_region
-    vpcId                                            = aws_vpc.main.id
+  set {
+    name  = "clusterName"
+    value = aws_eks_cluster.main.name
+  }
+
+  set {
+    name  = "serviceAccount.create"
+    value = "true"
+  }
+
+  set {
+    name  = "serviceAccount.name"
+    value = "aws-load-balancer-controller"
+  }
+
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.alb_controller.arn
+  }
+
+  set {
+    name  = "region"
+    value = var.aws_region
+  }
+
+  set {
+    name  = "vpcId"
+    value = aws_vpc.main.id
   }
 
   depends_on = [
