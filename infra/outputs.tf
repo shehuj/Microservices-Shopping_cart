@@ -18,7 +18,7 @@ output "certificate_arn" {
   value       = aws_acm_certificate.app.arn
 }
 
-output "load_balancer_hostname" {
-  description = "AWS Load Balancer hostname assigned to the service."
-  value       = kubernetes_service_v1.app.status[0].load_balancer[0].ingress[0].hostname
+output "alb_hostname" {
+  description = "ALB hostname assigned by the AWS Load Balancer Controller."
+  value       = kubernetes_ingress_v1.app.status[0].load_balancer[0].ingress[0].hostname
 }

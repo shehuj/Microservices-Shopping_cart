@@ -34,16 +34,11 @@ resource "aws_acm_certificate_validation" "app" {
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
 }
 
+# ClusterIP service — ALB targets pods directly via IP (target-type: ip)
 resource "kubernetes_service_v1" "app" {
   metadata {
     name      = "shopping-cart-svc"
     namespace = var.namespace
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-ssl-cert"                = aws_acm_certificate_validation.app.certificate_arn
-      "service.beta.kubernetes.io/aws-load-balancer-backend-protocol"        = "http"
-      "service.beta.kubernetes.io/aws-load-balancer-ssl-ports"               = "443"
-      "service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout" = "60"
-    }
   }
 
   spec {
@@ -54,13 +49,54 @@ resource "kubernetes_service_v1" "app" {
       deployment = "v1"
     }
 
-    type = "LoadBalancer"
+    type = "ClusterIP"
 
     port {
-      name        = "https"
-      port        = 443
+      name        = "http"
+      port        = 8070
       target_port = 8070
       protocol    = "TCP"
+    }
+  }
+}
+
+# ALB Ingress — internet-facing, HTTPS with ACM cert, HTTP→HTTPS redirect
+resource "kubernetes_ingress_v1" "app" {
+  metadata {
+    name      = "shopping-cart-ingress"
+    namespace = var.namespace
+    annotations = {
+      "kubernetes.io/ingress.class"                             = "alb"
+      "alb.ingress.kubernetes.io/scheme"                        = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"                   = "ip"
+      "alb.ingress.kubernetes.io/certificate-arn"               = aws_acm_certificate_validation.app.certificate_arn
+      "alb.ingress.kubernetes.io/listen-ports"                  = "[{\"HTTP\": 80}, {\"HTTPS\": 443}]"
+      "alb.ingress.kubernetes.io/ssl-redirect"                  = "443"
+      "alb.ingress.kubernetes.io/healthcheck-path"              = "/"
+      "alb.ingress.kubernetes.io/healthcheck-interval-seconds"  = "30"
+      "alb.ingress.kubernetes.io/healthy-threshold-count"       = "2"
+      "alb.ingress.kubernetes.io/unhealthy-threshold-count"     = "3"
+      "alb.ingress.kubernetes.io/load-balancer-attributes"      = "idle_timeout.timeout_seconds=60"
+    }
+  }
+
+  spec {
+    rule {
+      host = "shop.claudiq.com"
+      http {
+        path {
+          path      = "/"
+          path_type = "Prefix"
+          backend {
+            service {
+              name = kubernetes_service_v1.app.metadata[0].name
+              port {
+                number = 8070
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -69,16 +105,11 @@ resource "kubernetes_service_v1" "app" {
   depends_on = [aws_acm_certificate_validation.app]
 }
 
-data "aws_elb_hosted_zone_id" "main" {}
-
+# CNAME shop.claudiq.com → ALB hostname (CNAME valid for non-apex subdomains)
 resource "aws_route53_record" "app" {
   zone_id = data.aws_route53_zone.main.zone_id
   name    = "shop"
-  type    = "A"
-
-  alias {
-    name                   = kubernetes_service_v1.app.status[0].load_balancer[0].ingress[0].hostname
-    zone_id                = data.aws_elb_hosted_zone_id.main.id
-    evaluate_target_health = true
-  }
+  type    = "CNAME"
+  ttl     = 300
+  records = [kubernetes_ingress_v1.app.status[0].load_balancer[0].ingress[0].hostname]
 }
