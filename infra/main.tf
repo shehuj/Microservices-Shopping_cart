@@ -22,6 +22,11 @@ resource "kubernetes_namespace" "app" {
   }
 }
 
+moved {
+  from = kubernetes_secret.ghcr_pull
+  to   = kubernetes_secret.dockerhub_pull
+}
+
 resource "kubernetes_secret" "dockerhub_pull" {
   metadata {
     name      = var.image_pull_secret_name
