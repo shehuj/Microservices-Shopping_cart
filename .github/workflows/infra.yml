@@ -102,6 +102,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --region ${{ secrets.AWS_REGION }} \
+            --name shopping-cart-eks
+
+      - name: Remove unmanaged service
+        run: |
+          kubectl delete service shopping-cart-svc \
+            -n shopping-cart --ignore-not-found=true
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
