@@ -72,11 +72,13 @@ jobs:
       - name: Update image tag in manifest
         run: |
           IMAGE="${{ secrets.DOCKER_USERNAME }}/shopping-cart:${{ needs.build-and-push.outputs.image-tag }}"
-          sed -i "s|image: .*/shopping-cart:__TAG__|image: ${IMAGE}|" infra/deploymentservice.yml
+          sed -i "s|image:.*shopping-cart:__TAG__|image: ${IMAGE}|" infra/deploymentservice.yml
 
       - name: Apply Kubernetes manifest
         run: |
           kubectl delete deployment shopping-cart-deployment \
+            -n shopping-cart --ignore-not-found=true
+          kubectl delete service shopping-cart-svc \
             -n shopping-cart --ignore-not-found=true
           kubectl apply -f infra/deploymentservice.yml -n shopping-cart
 
