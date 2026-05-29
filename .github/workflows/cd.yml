@@ -78,8 +78,6 @@ jobs:
         run: |
           kubectl delete deployment shopping-cart-deployment \
             -n shopping-cart --ignore-not-found=true
-          kubectl delete service shopping-cart-svc \
-            -n shopping-cart --ignore-not-found=true
           kubectl apply -f infra/deploymentservice.yml -n shopping-cart
 
       - name: Wait for rollout
