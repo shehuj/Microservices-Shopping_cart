@@ -75,7 +75,7 @@ jobs:
           sed -i "s|image: .*/shopping-cart:.*|image: ${IMAGE}|" infra/deploymentservice.yml
 
       - name: Apply Kubernetes manifest
-        run: kubectl apply -f infra/deploymentservice.yml
+        run: kubectl apply -f infra/deploymentservice.yml -n shopping-cart
 
       - name: Wait for rollout
-        run: kubectl rollout status deployment/shopping-cart-deployment --timeout=120s
+        run: kubectl rollout status deployment/shopping-cart-deployment -n shopping-cart --timeout=5m
