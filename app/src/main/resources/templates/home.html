@@ -2,20 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <div th:replace="/fragments/header :: header"/>
+  <div th:replace="/fragments/header :: header"/>
 </head>
 
 <body>
 
 <div th:replace="/fragments/header :: navbar"/>
 
-<div class="container">
+<section class="qb-hero">
+  <h1>Fresh Food, Fast Delivery 🚀</h1>
+  <p>Order from our handpicked menu and get it delivered hot to your door.</p>
+</section>
 
+<section class="menu-section">
+  <div class="container">
+    <h2 class="section-title">🍽️ Our Menu</h2>
     <div th:replace="/fragments/products :: products"/>
-
     <div th:replace="/fragments/pagination :: pagination(URLparameter='/home')"/>
-
-</div>
+  </div>
+</section>
 
 <div th:replace="/fragments/footer :: footer"/>
 

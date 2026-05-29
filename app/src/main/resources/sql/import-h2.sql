@@ -1,48 +1,37 @@
 -- password in plaintext: "password"
 INSERT INTO USER (user_id, password, email, username, name, last_name, active)
-VALUES
-  (1, '$2a$06$OAPObzhRdRXBCbk7Hj/ot.jY3zPwR8n7/mfLtKIgTzdJa4.6TwsIm', 'user@mail.com', 'user', 'Name', 'Surname',
-   1);
--- password in plaintext: "password"
+VALUES (1, '$2a$06$OAPObzhRdRXBCbk7Hj/ot.jY3zPwR8n7/mfLtKIgTzdJa4.6TwsIm', 'admin@quickbite.com', 'admin', 'Admin', 'User', 1);
 INSERT INTO USER (user_id, password, email, username, name, last_name, active)
-VALUES
-  (2, '$2a$06$OAPObzhRdRXBCbk7Hj/ot.jY3zPwR8n7/mfLtKIgTzdJa4.6TwsIm', 'johndoe@gmail.com', 'johndoe', 'John', 'Doe', 1);
--- password in plaintext: "password"
-INSERT INTO USER (user_id, password, email, username, name, last_name, active)
-VALUES (3, '$2a$06$OAPObzhRdRXBCbk7Hj/ot.jY3zPwR8n7/mfLtKIgTzdJa4.6TwsIm', 'name@gmail.com', 'namesurname', 'Name',
-        'Surname', 1);
+VALUES (2, '$2a$06$OAPObzhRdRXBCbk7Hj/ot.jY3zPwR8n7/mfLtKIgTzdJa4.6TwsIm', 'john@example.com', 'johndoe', 'John', 'Doe', 1);
 
-INSERT INTO ROLE (role_id, role)
-VALUES (1, 'ROLE_ADMIN');
-INSERT INTO ROLE (role_id, role)
-VALUES (2, 'ROLE_USER');
+INSERT INTO ROLE (role_id, role) VALUES (1, 'ROLE_ADMIN');
+INSERT INTO ROLE (role_id, role) VALUES (2, 'ROLE_USER');
 
-INSERT INTO USER_ROLE (user_id, role_id)
-VALUES (1, 1);
-INSERT INTO USER_ROLE (user_id, role_id)
-VALUES (1, 2);
-INSERT INTO USER_ROLE (user_id, role_id)
-VALUES (2, 2);
-INSERT INTO USER_ROLE (user_id, role_id)
-VALUES (3, 2);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (1, 1);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (1, 2);
+INSERT INTO USER_ROLE (user_id, role_id) VALUES (2, 2);
 
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Soap', 'Pears baby soap for Kids', 1, 35.75);
+VALUES ('Margherita Pizza', 'Classic tomato base, fresh mozzarella and basil', 20, 12.99);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Tooth Brush', 'Signal Tooth Brushes Size in (L, M, S)', 5, 34.50);
+VALUES ('BBQ Chicken Burger', 'Grilled chicken fillet, BBQ sauce, coleslaw and pickles', 15, 10.49);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Shirt', 'Casual Shirt imported from France', 3, 1500.00);
+VALUES ('Pasta Carbonara', 'Creamy egg sauce, crispy pancetta, parmesan and black pepper', 12, 13.99);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Office Bag', 'Leather bag imported from USA', 40, 1000.00);
+VALUES ('Caesar Salad', 'Romaine lettuce, croutons, parmesan and Caesar dressing', 25, 8.99);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Bottle', 'Hot Water Bottles', 80, 450.45);
+VALUES ('BBQ Ribs Platter', 'Slow-cooked pork ribs with smoky BBQ glaze and fries', 8, 22.99);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Wrist Watch', 'Imported wrist watches from swiss', 800, 2500.00);
+VALUES ('Fish and Chips', 'Beer-battered cod fillet with thick-cut chips and tartare sauce', 18, 14.49);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Mobile Phone', '3G/4G capability', 700, 45000.00);
+VALUES ('Chocolate Lava Cake', 'Warm dark chocolate cake with a molten centre and vanilla ice cream', 30, 7.49);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Shampoo', 'Head and Shoulders Shampoo', 500, 300.00);
+VALUES ('Mango Smoothie', 'Fresh mango, yoghurt and a hint of honey, served chilled', 40, 5.49);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Leather Wallets', 'Imported Leather Wallets from AUS', 1000, 500.00);
+VALUES ('Garlic Bread', 'Toasted ciabatta with roasted garlic butter and fresh herbs', 50, 4.49);
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Camera', 'Imported Canon camera from USA', 10, 85000.00);
+VALUES ('Tiramisu', 'Italian classic with espresso-soaked ladyfingers and mascarpone cream', 20, 6.99);
+INSERT INTO PRODUCT (name, description, quantity, price)
+VALUES ('Chicken Tacos', 'Spiced grilled chicken, avocado, salsa and sour cream in soft tortillas', 22, 11.99);
+INSERT INTO PRODUCT (name, description, quantity, price)
+VALUES ('Tom Yum Soup', 'Spicy Thai prawn soup with lemongrass, kaffir lime and mushrooms', 14, 9.99);
