@@ -61,12 +61,12 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/shopping-cart:pr-${{ github.event.number }} app/
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/mallam-shehu-suya:pr-${{ github.event.number }} app/
 
       - name: Smoke-test the image
         run: |
           docker run -d --name smoke-test -p 8070:8070 \
-            ${{ secrets.DOCKER_USERNAME }}/shopping-cart:pr-${{ github.event.number }}
+            ${{ secrets.DOCKER_USERNAME }}/mallam-shehu-suya:pr-${{ github.event.number }}
           echo "Waiting for app to start..."
           for i in $(seq 1 12); do
             if curl -sf http://localhost:8070/; then
@@ -80,4 +80,4 @@ jobs:
           docker rm smoke-test
 
       - name: Push PR image to Docker Hub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/shopping-cart:pr-${{ github.event.number }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/mallam-shehu-suya:pr-${{ github.event.number }}

@@ -1,5 +1,5 @@
 locals {
-  app_label = "shopping-cart"
+  app_label = "mallam-shehu-suya"
 
   docker_config = jsonencode({
     auths = {

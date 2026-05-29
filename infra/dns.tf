@@ -37,7 +37,7 @@ resource "aws_acm_certificate_validation" "app" {
 # ClusterIP service — ALB targets pods directly via IP (target-type: ip)
 resource "kubernetes_service_v1" "app" {
   metadata {
-    name      = "shopping-cart-svc"
+    name      = "mallam-shehu-suya-svc"
     namespace = var.namespace
   }
 
@@ -63,7 +63,7 @@ resource "kubernetes_service_v1" "app" {
 # ALB Ingress — internet-facing, HTTPS with ACM cert, HTTP→HTTPS redirect
 resource "kubernetes_ingress_v1" "app" {
   metadata {
-    name      = "shopping-cart-ingress"
+    name      = "mallam-shehu-suya-ingress"
     namespace = var.namespace
     annotations = {
       "kubernetes.io/ingress.class"                             = "alb"

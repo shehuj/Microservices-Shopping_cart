@@ -10,8 +10,8 @@
 <div th:replace="/fragments/header :: navbar"/>
 
 <section class="qb-hero">
-  <h1>Fresh Food, Fast Delivery 🚀</h1>
-  <p>Order from our handpicked menu and get it delivered hot to your door.</p>
+  <h1>Fresh Hot Suya, Ready on the go 🚀</h1>
+  <p>Order from our handpicked menu and get it fresh on arrival.</p>
 </section>
 
 <section class="menu-section">
@@ -23,6 +23,34 @@
 </section>
 
 <div th:replace="/fragments/footer :: footer"/>
+
+<!-- Sign-up modal -->
+<div id="signup-modal" class="modal-overlay" onclick="hideSignupModal(event)">
+  <div class="modal-card">
+    <button class="modal-close" onclick="hideSignupModal()">&times;</button>
+    <div class="modal-emoji">🔥</div>
+    <h2 class="modal-title">Join Mallam Shehu Suya</h2>
+    <p class="modal-sub">Create a free account to add items to your cart and place orders.</p>
+    <a href="/registration" class="btn-primary-full" style="display:block;text-align:center;text-decoration:none;margin-bottom:0.75rem;">Sign Up Free</a>
+    <a href="/login" class="btn-outline">Already have an account? Log In</a>
+  </div>
+</div>
+
+<script>
+  function showSignupModal() {
+    document.getElementById('signup-modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function hideSignupModal(e) {
+    if (!e || e.target.id === 'signup-modal') {
+      document.getElementById('signup-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') hideSignupModal();
+  });
+</script>
 
 </body>
 </html>

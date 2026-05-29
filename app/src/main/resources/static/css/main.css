@@ -442,6 +442,69 @@ body {
 .qb-footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
 .qb-footer .user-info { margin-bottom: 0.4rem; }
 
+/* ── Sign-up Modal ───────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  animation: modal-in 0.2s ease;
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.9rem; right: 1rem;
+  background: none; border: none;
+  font-size: 1.5rem;
+  color: var(--muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.modal-close:hover { background: var(--border); }
+
+.modal-emoji { font-size: 3rem; margin-bottom: 0.75rem; }
+
+.modal-title { font-size: 1.35rem; font-weight: 700; color: var(--secondary); margin-bottom: 0.5rem; }
+
+.modal-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.55; }
+
+.btn-outline {
+  display: block;
+  color: var(--primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 0.75rem;
+}
+
+.btn-outline:hover { text-decoration: underline; }
+
 /* ── Responsive ──────────────────────────────────── */
 @media (max-width: 992px) {
   .menu-grid { grid-template-columns: repeat(2, 1fr); }

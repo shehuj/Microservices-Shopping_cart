@@ -36,12 +36,12 @@ jobs:
         run: |
           aws eks update-kubeconfig \
             --region ${{ secrets.AWS_REGION }} \
-            --name shopping-cart-eks
+            --name mallam-shehu-suya-eks
 
       - name: Delete deployment
         run: |
-          kubectl delete deployment shopping-cart-deployment \
-            -n shopping-cart --ignore-not-found=true
+          kubectl delete deployment mallam-shehu-suya-deployment \
+            -n mallam-shehu-suya --ignore-not-found=true
           echo "Deployment deleted."
 
   destroy-k8s-infra:
@@ -56,7 +56,7 @@ jobs:
       TF_VAR_dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
       TF_VAR_dockerhub_token: ${{ secrets.DOCKER_PASSWORD }}
       TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
-      TF_VAR_cluster_name: shopping-cart-eks
+      TF_VAR_cluster_name: mallam-shehu-suya-eks
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -73,7 +73,7 @@ jobs:
         run: |
           terraform init \
             -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
-            -backend-config="key=shopping-cart/k8s/terraform.tfstate" \
+            -backend-config="key=mallam-shehu-suya/k8s/terraform.tfstate" \
             -backend-config="region=${{ secrets.AWS_REGION }}" \
             -backend-config="encrypt=true"
 
@@ -107,7 +107,7 @@ jobs:
         run: |
           terraform init \
             -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
-            -backend-config="key=shopping-cart/eks/terraform.tfstate" \
+            -backend-config="key=mallam-shehu-suya/eks/terraform.tfstate" \
             -backend-config="region=${{ secrets.AWS_REGION }}" \
             -backend-config="encrypt=true"
 

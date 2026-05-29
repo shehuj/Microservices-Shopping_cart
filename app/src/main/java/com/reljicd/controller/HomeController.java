@@ -25,6 +25,11 @@ public class HomeController {
         this.productService = productService;
     }
 
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/home";
+    }
+
     @GetMapping("/home")
     public ModelAndView home(@RequestParam("page") Optional<Integer> page) {
 
