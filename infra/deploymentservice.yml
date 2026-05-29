@@ -38,7 +38,7 @@ spec:
       containers:
         - name: shopping-cart
 
-          image: trusted-repo/shopping-cart:__TAG__
+          image: captcloud01/shopping-cart:__TAG__
           imagePullPolicy: Always
 
           ports:
@@ -91,9 +91,6 @@ kind: Service
 metadata:
   name: shopping-cart-svc
   namespace: shopping-cart
-
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-internal: "true"
 
 spec:
   type: LoadBalancer
