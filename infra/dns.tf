@@ -105,11 +105,32 @@ resource "kubernetes_ingress_v1" "app" {
   depends_on = [aws_acm_certificate_validation.app]
 }
 
-# CNAME mallamshehusuya.com → ALB hostname
+# ALB hosted zone IDs per region — required for apex A-alias (CNAME not allowed at zone apex)
+# https://docs.aws.amazon.com/general/latest/gr/elb.html
+locals {
+  alb_hosted_zone_id = {
+    "us-east-1"      = "Z35SXDOTRQ7X7K"
+    "us-east-2"      = "Z3AADJGX6KTTL2"
+    "us-west-1"      = "Z368ELLRRE2KJ0"
+    "us-west-2"      = "Z1H1FL5HABSF5"
+    "eu-west-1"      = "Z32O12XQLNTSW2"
+    "eu-west-2"      = "ZHURV8PSTC4K8"
+    "eu-central-1"   = "Z215JYRZR1TBD5"
+    "ap-southeast-1" = "Z1LMS91P8CMLE5"
+    "ap-southeast-2" = "Z1GM3OXH4ZPM65"
+    "ap-northeast-1" = "Z14GRHDCWA56QT"
+  }[var.aws_region]
+}
+
+# A-alias mallamshehusuya.com → ALB (apex domain requires alias, not CNAME)
 resource "aws_route53_record" "app" {
   zone_id = data.aws_route53_zone.main.zone_id
   name    = ""
-  type    = "CNAME"
-  ttl     = 300
-  records = [kubernetes_ingress_v1.app.status[0].load_balancer[0].ingress[0].hostname]
+  type    = "A"
+
+  alias {
+    name                   = kubernetes_ingress_v1.app.status[0].load_balancer[0].ingress[0].hostname
+    zone_id                = local.alb_hosted_zone_id
+    evaluate_target_health = true
+  }
 }
