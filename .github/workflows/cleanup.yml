@@ -1,0 +1,119 @@
+name: Cleanup
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    name: "0 · Branch Guard"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce dev branch
+        run: |
+          if [ "${{ github.ref_name }}" != "dev" ]; then
+            echo "::error::Cleanup must be triggered from the dev branch — the same branch that provisions resources."
+            exit 1
+          fi
+          echo "Branch check passed. Proceeding with cleanup."
+
+  delete-app:
+    name: "1 · Delete App Resources"
+    runs-on: ubuntu-latest
+    needs: guard
+    environment: production
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+    steps:
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --region ${{ secrets.AWS_REGION }} \
+            --name shopping-cart-eks
+
+      - name: Delete deployment and service
+        run: |
+          kubectl delete deployment shopping-cart-deployment \
+            -n shopping-cart --ignore-not-found=true
+          kubectl delete service shopping-cart-svc \
+            -n shopping-cart --ignore-not-found=true
+          echo "App resources deleted."
+
+  destroy-k8s-infra:
+    name: "2 · Destroy Kubernetes Infra (Terraform)"
+    runs-on: ubuntu-latest
+    needs: delete-app
+    environment: production
+    defaults:
+      run:
+        working-directory: infra
+    env:
+      TF_VAR_dockerhub_username: ${{ secrets.DOCKER_USERNAME }}
+      TF_VAR_dockerhub_token: ${{ secrets.DOCKER_PASSWORD }}
+      TF_VAR_aws_region: ${{ secrets.AWS_REGION }}
+      TF_VAR_cluster_name: shopping-cart-eks
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.6"
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="key=shopping-cart/k8s/terraform.tfstate" \
+            -backend-config="region=${{ secrets.AWS_REGION }}" \
+            -backend-config="encrypt=true"
+
+      - name: Terraform Destroy
+        run: |
+          echo "Destroying Kubernetes namespace, secrets, network policies..."
+          terraform destroy -auto-approve
+
+  destroy-eks:
+    name: "3 · Destroy EKS Cluster (Terraform)"
+    runs-on: ubuntu-latest
+    needs: destroy-k8s-infra
+    environment: production
+    defaults:
+      run:
+        working-directory: infra/eks
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.6"
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="key=shopping-cart/eks/terraform.tfstate" \
+            -backend-config="region=${{ secrets.AWS_REGION }}" \
+            -backend-config="encrypt=true"
+
+      - name: Terraform Destroy
+        run: |
+          echo "Destroying EKS cluster, node group, VPC..."
+          terraform destroy -auto-approve
