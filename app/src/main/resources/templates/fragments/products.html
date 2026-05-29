@@ -1,27 +1,49 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-
-<head>
-</head>
-
+<head></head>
 <body>
 
 <div th:fragment="products">
-    <div class="panel-default well" th:each="product : ${products}">
-        <div class="panel-heading">
-            <h1 th:text="${product.name}"></h1>
-        </div>
-        <h3 th:text="${product.description}" class="panel-body">Description</h3>
-        <div class="row panel-footer">
-            <div th:inline="text" class="col-md-2">Price: [[${product.price}]] $</div>
-            <div th:inline="text" class="col-md-9">In Stock: [[${product.quantity}]]</div>
-            <a th:href="@{'/shoppingCart/addProduct/{id}'(id=${product.id})}" class="col-md-1"
-               sec:authorize="isAuthenticated()" th:if="${product.quantity}>0">
-                <button type="button" class="btn btn-primary" th:text="Buy">Buy</button>
-            </a>
-        </div>
-        <br></br>
+  <div class="menu-grid">
+    <div class="food-card" th:each="product : ${products}">
+
+      <div class="food-img">
+        <span th:text="${product.name.contains('Pizza') or product.name.contains('pizza') ? '🍕' :
+                         product.name.contains('Burger') or product.name.contains('burger') ? '🍔' :
+                         product.name.contains('Pasta') or product.name.contains('pasta') ? '🍝' :
+                         product.name.contains('Salad') or product.name.contains('salad') ? '🥗' :
+                         product.name.contains('Ribs') or product.name.contains('BBQ') ? '🍖' :
+                         product.name.contains('Fish') or product.name.contains('fish') ? '🐟' :
+                         product.name.contains('Cake') or product.name.contains('cake') ? '🎂' :
+                         product.name.contains('Smoothie') or product.name.contains('Drink') ? '🥤' :
+                         product.name.contains('Bread') or product.name.contains('bread') ? '🥖' :
+                         product.name.contains('Tiramisu') or product.name.contains('Dessert') ? '🍮' :
+                         product.name.contains('Chicken') ? '🍗' :
+                         product.name.contains('Sushi') ? '🍣' :
+                         product.name.contains('Taco') ? '🌮' :
+                         product.name.contains('Soup') ? '🍜' : '🍽️'}">🍽️</span>
+      </div>
+
+      <div class="food-body">
+        <div class="food-name" th:text="${product.name}">Item Name</div>
+        <div class="food-desc" th:text="${product.description}">Description</div>
+      </div>
+
+      <div class="food-footer">
+        <span class="food-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}">$0.00</span>
+        <a th:href="@{'/shoppingCart/addProduct/{id}'(id=${product.id})}"
+           sec:authorize="isAuthenticated()"
+           th:if="${product.quantity} > 0">
+          <button class="btn-order">+ Add</button>
+        </a>
+        <span class="out-of-stock" th:if="${product.quantity} == 0">Sold Out</span>
+        <a th:href="@{/login}" sec:authorize="!isAuthenticated()">
+          <button class="btn-order">Order</button>
+        </a>
+      </div>
+
     </div>
+  </div>
 </div>
 
 </body>

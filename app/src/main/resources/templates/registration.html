@@ -2,70 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <div th:replace="/fragments/header :: header"/>
+  <div th:replace="/fragments/header :: header"/>
 </head>
 
 <body>
 
 <div th:replace="/fragments/header :: navbar"/>
 
+<section class="auth-section">
+  <div class="auth-card">
 
-<div class="container">
+    <div class="auth-brand">🍕</div>
+    <h2 style="text-align:center;font-size:1.4rem;font-weight:700;margin-bottom:0.25rem;">Create Account</h2>
+    <p class="auth-subtitle">Join QuickBite and start ordering</p>
 
-    <!--Show this info message only if registered successfully-->
-    <div class="alert alert-info" th:if="${successMessage}" th:utext="${successMessage}"></div>
+    <div class="alert-success" th:if="${successMessage}" th:utext="${successMessage}"></div>
 
-    <div class="row" style="margin-top:20px">
-        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-            <form autocomplete="off" action="#" th:action="@{/registration}"
-                  th:object="${user}" method="post" role="form">
+    <form autocomplete="off" th:action="@{/registration}" th:object="${user}" method="post">
 
-                <div class="form-group">
-                    <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-                           class="alert alert-danger"></label>
-                    <input type="text" th:field="*{name}" placeholder="Name"
-                           class="form-control input-lg"/>
-                </div>
+      <div th:if="${#fields.hasErrors('name')}" class="alert-error" th:errors="*{name}"></div>
+      <label class="form-label">First Name</label>
+      <input type="text" th:field="*{name}" class="form-input" placeholder="First name"/>
 
-                <div class="form-group">
-                    <label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
-                           class="alert alert-danger"></label>
-                    <input type="text" th:field="*{lastName}" placeholder="Last Name"
-                           class="form-control input-lg"/>
-                </div>
+      <div th:if="${#fields.hasErrors('lastName')}" class="alert-error" th:errors="*{lastName}"></div>
+      <label class="form-label">Last Name</label>
+      <input type="text" th:field="*{lastName}" class="form-input" placeholder="Last name"/>
 
-                <div class="form-group">
-                    <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                           class="alert alert-danger"></label>
-                    <input type="text" th:field="*{email}" placeholder="Email"
-                           class="form-control input-lg"/>
-                </div>
+      <div th:if="${#fields.hasErrors('email')}" class="alert-error" th:errors="*{email}"></div>
+      <label class="form-label">Email</label>
+      <input type="text" th:field="*{email}" class="form-input" placeholder="your@email.com"/>
 
-                <div class="form-group">
-                    <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-                           class="alert alert-danger"></label>
-                    <input type="password" th:field="*{password}" placeholder="Password"
-                           class="form-control input-lg"/>
-                </div>
+      <div th:if="${#fields.hasErrors('username')}" class="alert-error" th:errors="*{username}"></div>
+      <label class="form-label">Username</label>
+      <input type="text" th:field="*{username}" class="form-input" placeholder="Choose a username"/>
 
-                <div class="form-group">
-                    <label th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
-                           class="alert alert-danger"></label>
-                    <input type="text" th:field="*{username}" placeholder="Username"
-                           class="form-control input-lg"/>
-                </div>
+      <div th:if="${#fields.hasErrors('password')}" class="alert-error" th:errors="*{password}"></div>
+      <label class="form-label">Password</label>
+      <input type="password" th:field="*{password}" class="form-input" placeholder="Create a password"/>
 
-                <div class="row">
-                    <div class="col-sm-3" style="float: none; margin: 0 auto;">
-                        <input type="submit" class="btn btn-primary btn-block" value="Submit"/>
-                    </div>
-                </div>
+      <button type="submit" class="btn-primary-full">Create Account</button>
+    </form>
 
-            </form>
-        </div>
+    <div class="auth-switch">
+      Already have an account? <a th:href="@{/login}">Sign in</a>
     </div>
 
-</div>
+  </div>
+</section>
 
 <div th:replace="/fragments/footer :: footer"/>
 

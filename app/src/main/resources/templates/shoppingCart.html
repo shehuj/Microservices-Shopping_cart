@@ -3,44 +3,91 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
-    <div th:replace="/fragments/header :: header"/>
+  <div th:replace="/fragments/header :: header"/>
 </head>
 
 <body>
 
 <div th:replace="/fragments/header :: navbar"/>
 
-<div class="container">
+<section class="cart-section">
+  <div class="container">
 
-    <h1 class="jumbotron">
-        <span sec:authentication="name"></span>'s Shopping Cart
-    </h1>
+    <h1 class="cart-title">🛒 Your Order</h1>
 
-    <div class="alert alert-info" th:if="${outOfStockMessage}" th:utext="${outOfStockMessage}"></div>
+    <div class="alert-info" th:if="${outOfStockMessage}" th:utext="${outOfStockMessage}"></div>
 
-    <div class="panel-default well" th:each="product : ${products.entrySet()}">
-        <div class="panel-heading">
-            <h1><a th:text="${product.getKey().name}" th:href="@{'/product/' + ${product.getKey().id}}">Title</a></h1>
-            <h3 th:text="${product.getKey().description}">Description</h3>
-        </div>
-        <div class="row panel-body">
-            <div th:inline="text" class="col-md-2">Price: [[${product.getKey().price}]] $</div>
-            <div th:inline="text" class="col-md-9">Quantity: [[${product.getValue()}]]</div>
-            <a th:href="@{'/shoppingCart/removeProduct/{id}'(id=${product.getKey().id})}" class="col-md-1">
-                <button type="button" class="btn btn-primary" th:text="Remove">Remove</button>
-            </a>
-        </div>
-        <br></br>
+    <!-- Empty cart state -->
+    <div class="cart-empty" th:if="${#maps.isEmpty(products)}">
+      <div class="empty-icon">🍽️</div>
+      <h3>Your order is empty</h3>
+      <p style="margin: 0.5rem 0 1.5rem">Browse our menu and add something delicious!</p>
+      <a th:href="@{/home}"><button class="btn-order" style="padding:0.7rem 2rem;font-size:1rem;">Browse Menu</button></a>
     </div>
 
-    <div class="row panel-body">
-        <h2 class="col-md-11" th:inline="text">Total: [[${total}]]</h2>
-        <a th:href="@{'/shoppingCart/checkout'}" class="col-md-1">
-            <button type="button" class="btn btn-danger" th:text="Checkout">Checkout</button>
+    <!-- Cart items -->
+    <div th:unless="${#maps.isEmpty(products)}">
+
+      <div class="cart-item" th:each="product : ${products.entrySet()}">
+        <div class="cart-item-emoji"
+             th:text="${product.getKey().name.contains('Pizza') ? '🍕' :
+                        product.getKey().name.contains('Burger') ? '🍔' :
+                        product.getKey().name.contains('Pasta') ? '🍝' :
+                        product.getKey().name.contains('Salad') ? '🥗' :
+                        product.getKey().name.contains('Ribs') or product.getKey().name.contains('BBQ') ? '🍖' :
+                        product.getKey().name.contains('Fish') ? '🐟' :
+                        product.getKey().name.contains('Cake') ? '🎂' :
+                        product.getKey().name.contains('Smoothie') or product.getKey().name.contains('Drink') ? '🥤' :
+                        product.getKey().name.contains('Bread') ? '🥖' :
+                        product.getKey().name.contains('Chicken') ? '🍗' : '🍽️'}">🍽️</div>
+
+        <div class="cart-item-info">
+          <div class="cart-item-name" th:text="${product.getKey().name}">Item</div>
+          <div class="cart-item-meta"
+               th:text="'Qty: ' + ${product.getValue()} + '  ·  $' + ${#numbers.formatDecimal(product.getKey().price, 1, 2)} + ' each'">
+            Qty · Price
+          </div>
+        </div>
+
+        <span class="cart-item-price"
+              th:text="'$' + ${#numbers.formatDecimal(product.getKey().price * product.getValue(), 1, 2)}">$0.00</span>
+
+        <a th:href="@{'/shoppingCart/removeProduct/{id}'(id=${product.getKey().id})}">
+          <button class="btn-remove">Remove</button>
         </a>
+      </div>
+
+      <!-- Order summary -->
+      <div class="cart-summary">
+        <h3 style="font-size:1rem;font-weight:600;margin-bottom:0.75rem;">Order Summary</h3>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span th:text="'$' + ${#numbers.formatDecimal(total, 1, 2)}">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Delivery fee</span>
+          <span style="color:#27AE60;font-weight:600;">Free</span>
+        </div>
+
+        <div class="summary-row summary-total">
+          <span>Total</span>
+          <span th:text="'$' + ${#numbers.formatDecimal(total, 1, 2)}">$0.00</span>
+        </div>
+
+        <a th:href="@{'/shoppingCart/checkout'}" class="btn-checkout">
+          💳 Place Order &amp; Pay
+        </a>
+
+        <a th:href="@{/home}" style="display:block;text-align:center;margin-top:0.75rem;font-size:0.88rem;color:#7F8C8D;text-decoration:none;">
+          ← Continue ordering
+        </a>
+      </div>
+
     </div>
 
-</div>
+  </div>
+</section>
 
 <div th:replace="/fragments/footer :: footer"/>
 

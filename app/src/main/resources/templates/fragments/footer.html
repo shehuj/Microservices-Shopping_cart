@@ -1,35 +1,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-
-<head>
-</head>
-
+<head></head>
 <body>
 
 <div th:fragment="footer">
-
-    <hr/>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 text-center">
-                <span sec:authorize="isAuthenticated()">
-                | Logged user: <span sec:authentication="name"></span> |
-                Roles: <span sec:authentication="principal.authorities"></span> |
-                <a th:href="@{/logout}">Sign Out</a>
-            </span>
-
-                <div>
-                    <p class="text-center">&copy; 2017 Dusan Reljic</p>
-                </div>
-
-            </div>
-        </div>
+  <footer class="qb-footer">
+    <div sec:authorize="isAuthenticated()" class="user-info">
+      Logged in as <strong sec:authentication="name"></strong>
+      &nbsp;·&nbsp;<a th:href="@{/logout}">Sign Out</a>
     </div>
-
-    <script type="text/javascript"
-            src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+    <div>🍕 QuickBite &copy; 2026 &mdash; Fresh food, fast delivery</div>
+  </footer>
 </div>
 
 </body>
