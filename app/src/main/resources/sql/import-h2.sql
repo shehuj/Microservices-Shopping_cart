@@ -1,6 +1,6 @@
 -- password in plaintext: "password"
 INSERT INTO USER (user_id, password, email, username, name, last_name, active)
-VALUES (1, '$2a$06$OAPObzhRdRXBCbk7Hj/ot.jY3zPwR8n7/mfLtKIgTzdJa4.6TwsIm', 'admin@quickbite.com', 'admin', 'Admin', 'User', 1);
+VALUES (1, '$2a$06$OAPObzhRdRXBCbk7Hj/ot.jY3zPwR8n7/mfLtKIgTzdJa4.6TwsIm', 'admin@mallamshehu.com', 'admin', 'Mallam', 'Shehu', 1);
 INSERT INTO USER (user_id, password, email, username, name, last_name, active)
 VALUES (2, '$2a$06$OAPObzhRdRXBCbk7Hj/ot.jY3zPwR8n7/mfLtKIgTzdJa4.6TwsIm', 'john@example.com', 'johndoe', 'John', 'Doe', 1);
 
@@ -12,26 +12,16 @@ INSERT INTO USER_ROLE (user_id, role_id) VALUES (1, 2);
 INSERT INTO USER_ROLE (user_id, role_id) VALUES (2, 2);
 
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Margherita Pizza', 'Classic tomato base, fresh mozzarella and basil', 20, 12.99);
+VALUES ('Beef Suya', 'Classic Northern Nigeria grilled beef skewers coated in yaji spice blend — served with sliced onions and tomatoes', 50, 2500.00);
+
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('BBQ Chicken Burger', 'Grilled chicken fillet, BBQ sauce, coleslaw and pickles', 15, 10.49);
+VALUES ('Chicken Suya', 'Tender boneless chicken thigh skewers marinated overnight in our signature yaji blend and grilled over open flame', 40, 2000.00);
+
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Pasta Carbonara', 'Creamy egg sauce, crispy pancetta, parmesan and black pepper', 12, 13.99);
+VALUES ('Ram Suya', 'Premium ram meat skewers — smoky, spiced and grilled to perfection, available on weekends', 20, 3500.00);
+
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Caesar Salad', 'Romaine lettuce, croutons, parmesan and Caesar dressing', 25, 8.99);
+VALUES ('Kilishi', 'Sun-dried spiced beef strips — a Northern Nigerian delicacy, thinly sliced and packed with bold flavour', 30, 3000.00);
+
 INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('BBQ Ribs Platter', 'Slow-cooked pork ribs with smoky BBQ glaze and fries', 8, 22.99);
-INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Fish and Chips', 'Beer-battered cod fillet with thick-cut chips and tartare sauce', 18, 14.49);
-INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Chocolate Lava Cake', 'Warm dark chocolate cake with a molten centre and vanilla ice cream', 30, 7.49);
-INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Mango Smoothie', 'Fresh mango, yoghurt and a hint of honey, served chilled', 40, 5.49);
-INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Garlic Bread', 'Toasted ciabatta with roasted garlic butter and fresh herbs', 50, 4.49);
-INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Tiramisu', 'Italian classic with espresso-soaked ladyfingers and mascarpone cream', 20, 6.99);
-INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Chicken Tacos', 'Spiced grilled chicken, avocado, salsa and sour cream in soft tortillas', 22, 11.99);
-INSERT INTO PRODUCT (name, description, quantity, price)
-VALUES ('Tom Yum Soup', 'Spicy Thai prawn soup with lemongrass, kaffir lime and mushrooms', 14, 9.99);
+VALUES ('Mixed Offal Suya', 'A rich mix of liver, kidney and heart skewers seasoned with yaji, grilled fresh to order', 25, 1800.00);
