@@ -13,7 +13,7 @@ variable "environment" {
 variable "cluster_name" {
   description = "EKS cluster name."
   type        = string
-  default     = "shopping-cart-eks"
+  default     = "mallam-shehu-suya-eks"
 }
 
 variable "kubernetes_version" {

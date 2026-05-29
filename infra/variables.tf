@@ -7,13 +7,13 @@ variable "aws_region" {
 variable "cluster_name" {
   description = "EKS cluster name to manage resources on."
   type        = string
-  default     = "shopping-cart-eks"
+  default     = "mallam-shehu-suya-eks"
 }
 
 variable "namespace" {
-  description = "Kubernetes namespace to create for the shopping-cart app."
+  description = "Kubernetes namespace to create for the mallam-shehu-suya app."
   type        = string
-  default     = "shopping-cart"
+  default     = "mallam-shehu-suya"
 }
 
 variable "image_pull_secret_name" {

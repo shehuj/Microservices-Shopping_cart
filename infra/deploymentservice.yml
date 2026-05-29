@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shopping-cart-deployment
-  namespace: shopping-cart
+  name: mallam-shehu-suya-deployment
+  namespace: mallam-shehu-suya
 
 spec:
   replicas: 2
@@ -10,7 +10,7 @@ spec:
 
   selector:
     matchLabels:
-      app: shopping-cart
+      app: mallam-shehu-suya
       tier: backend
       phase: production
       deployment: v1
@@ -18,7 +18,7 @@ spec:
   template:
     metadata:
       labels:
-        app: shopping-cart
+        app: mallam-shehu-suya
         tier: backend
         phase: production
         deployment: v1
@@ -36,9 +36,9 @@ spec:
           type: RuntimeDefault
 
       containers:
-        - name: shopping-cart
+        - name: mallam-shehu-suya
 
-          image: captcloud01/shopping-cart:__TAG__
+          image: captcloud01/mallam-shehu-suya:__TAG__
           imagePullPolicy: Always
 
           ports:

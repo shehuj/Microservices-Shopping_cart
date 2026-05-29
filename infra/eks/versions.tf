@@ -21,7 +21,7 @@ terraform {
   }
 
   backend "s3" {
-    key     = "shopping-cart/eks/terraform.tfstate"
+    key     = "mallam-shehu-suya/eks/terraform.tfstate"
     encrypt = true
   }
 }
@@ -31,7 +31,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "shopping-cart"
+      Project     = "mallam-shehu-suya"
       Environment = var.environment
       ManagedBy   = "Terraform"
     }

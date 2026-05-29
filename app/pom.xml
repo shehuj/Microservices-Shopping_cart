@@ -6,12 +6,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.shehuj</groupId>
-  <artifactId>shopping-cart</artifactId>
+  <artifactId>mallam-shehu-suya</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>shopping-cart</name>
-  <description>Demo project for Spring Boot Shopping Cart</description>
+  <name>mallam-shehu-suya</name>
+  <description>Mallam Shehu Suya online ordering app</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>

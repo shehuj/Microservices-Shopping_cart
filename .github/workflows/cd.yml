@@ -44,8 +44,8 @@ jobs:
           context: app/
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/shopping-cart:${{ steps.image-tag.outputs.tag }}
-            ${{ secrets.DOCKER_USERNAME }}/shopping-cart:latest
+            ${{ secrets.DOCKER_USERNAME }}/mallam-shehu-suya:${{ steps.image-tag.outputs.tag }}
+            ${{ secrets.DOCKER_USERNAME }}/mallam-shehu-suya:latest
 
   deploy:
     name: Deploy to Kubernetes
@@ -67,18 +67,18 @@ jobs:
         run: |
           aws eks update-kubeconfig \
             --region ${{ secrets.AWS_REGION }} \
-            --name shopping-cart-eks
+            --name mallam-shehu-suya-eks
 
       - name: Update image tag in manifest
         run: |
-          IMAGE="${{ secrets.DOCKER_USERNAME }}/shopping-cart:${{ needs.build-and-push.outputs.image-tag }}"
-          sed -i "s|image:.*shopping-cart:__TAG__|image: ${IMAGE}|" infra/deploymentservice.yml
+          IMAGE="${{ secrets.DOCKER_USERNAME }}/mallam-shehu-suya:${{ needs.build-and-push.outputs.image-tag }}"
+          sed -i "s|image:.*mallam-shehu-suya:__TAG__|image: ${IMAGE}|" infra/deploymentservice.yml
 
       - name: Apply Kubernetes manifest
         run: |
-          kubectl delete deployment shopping-cart-deployment \
-            -n shopping-cart --ignore-not-found=true
-          kubectl apply -f infra/deploymentservice.yml -n shopping-cart
+          kubectl delete deployment mallam-shehu-suya-deployment \
+            -n mallam-shehu-suya --ignore-not-found=true
+          kubectl apply -f infra/deploymentservice.yml -n mallam-shehu-suya
 
       - name: Wait for rollout
-        run: kubectl rollout status deployment/shopping-cart-deployment -n shopping-cart --timeout=5m
+        run: kubectl rollout status deployment/mallam-shehu-suya-deployment -n mallam-shehu-suya --timeout=5m

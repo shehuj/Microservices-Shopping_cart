@@ -1,10 +1,10 @@
 data "aws_route53_zone" "main" {
-  name         = "claudiq.com"
+  name         = "mallamshehusuya.com"
   private_zone = false
 }
 
 resource "aws_acm_certificate" "app" {
-  domain_name       = "shop.claudiq.com"
+  domain_name       = "mallamshehusuya.com"
   validation_method = "DNS"
 
   lifecycle {
@@ -37,7 +37,7 @@ resource "aws_acm_certificate_validation" "app" {
 # ClusterIP service — ALB targets pods directly via IP (target-type: ip)
 resource "kubernetes_service_v1" "app" {
   metadata {
-    name      = "shopping-cart-svc"
+    name      = "mallam-shehu-suya-svc"
     namespace = var.namespace
   }
 
@@ -63,7 +63,7 @@ resource "kubernetes_service_v1" "app" {
 # ALB Ingress — internet-facing, HTTPS with ACM cert, HTTP→HTTPS redirect
 resource "kubernetes_ingress_v1" "app" {
   metadata {
-    name      = "shopping-cart-ingress"
+    name      = "mallam-shehu-suya-ingress"
     namespace = var.namespace
     annotations = {
       "kubernetes.io/ingress.class"                             = "alb"
@@ -82,7 +82,7 @@ resource "kubernetes_ingress_v1" "app" {
 
   spec {
     rule {
-      host = "shop.claudiq.com"
+      host = "mallamshehusuya.com"
       http {
         path {
           path      = "/"
@@ -105,10 +105,10 @@ resource "kubernetes_ingress_v1" "app" {
   depends_on = [aws_acm_certificate_validation.app]
 }
 
-# CNAME shop.claudiq.com → ALB hostname (CNAME valid for non-apex subdomains)
+# CNAME mallamshehusuya.com → ALB hostname
 resource "aws_route53_record" "app" {
   zone_id = data.aws_route53_zone.main.zone_id
-  name    = "shop"
+  name    = ""
   type    = "CNAME"
   ttl     = 300
   records = [kubernetes_ingress_v1.app.status[0].load_balancer[0].ingress[0].hostname]

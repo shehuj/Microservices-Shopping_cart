@@ -29,9 +29,7 @@
           <button class="btn-order">+ Add</button>
         </a>
         <span class="out-of-stock" th:if="${product.quantity} == 0">Sold Out</span>
-        <a th:href="@{/login}" sec:authorize="!isAuthenticated()">
-          <button class="btn-order">Order</button>
-        </a>
+        <button class="btn-order" onclick="showSignupModal()" sec:authorize="!isAuthenticated()">Order</button>
       </div>
 
     </div>

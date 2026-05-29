@@ -13,7 +13,7 @@ terraform {
   }
 
   backend "s3" {
-    key     = "shopping-cart/k8s/terraform.tfstate"
+    key     = "mallam-shehu-suya/k8s/terraform.tfstate"
     encrypt = true
   }
 }

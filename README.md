@@ -1,6 +1,6 @@
-# Shopping Cart
+# Mallam Shehu Suya
 
-A Spring Boot shopping cart web application containerised with Docker, deployed to an AWS EKS cluster via GitHub Actions CI/CD with Terraform-managed infrastructure.
+A Spring Boot online ordering app for Mallam Shehu Suya, containerised with Docker, deployed to an AWS EKS cluster via GitHub Actions CI/CD with Terraform-managed infrastructure.
 
 ## Repository Structure
 
@@ -22,7 +22,7 @@ A Spring Boot shopping cart web application containerised with Docker, deployed 
 |---|---|
 | App | Spring Boot 1.5.3, Java 8, Spring Security, Spring Data JPA, Thymeleaf |
 | Database | H2 (in-memory, dev/test) · MySQL (production) |
-| Container | Docker → Docker Hub (`captcloud01/shopping-cart`) |
+| Container | Docker → Docker Hub (`captcloud01/mallam-shehu-suya`) |
 | Cluster | AWS EKS (Kubernetes 1.32, t3.medium nodes, 1–4 auto-scaled) |
 | Networking | VPC with public + private subnets across 3 AZs, NAT Gateways |
 | Infra-as-Code | Terraform (AWS + Kubernetes providers, S3 remote state) |
@@ -59,7 +59,7 @@ Validate Infra  ──►  Build / Test / Push
 | Job | What it does |
 |---|---|
 | **Validate Infra** | Asserts `app/Dockerfile` and `infra/deploymentservice.yml` exist; validates manifest with `kubeconform` |
-| **Build, Test & Push** | Runs Maven tests in `app/`, builds image, smoke-tests container on port 8070, pushes `captcloud01/shopping-cart:pr-<n>` to Docker Hub |
+| **Build, Test & Push** | Runs Maven tests in `app/`, builds image, smoke-tests container on port 8070, pushes `captcloud01/mallam-shehu-suya:pr-<n>` to Docker Hub |
 
 ### `cd.yml` — CD (`main` push)
 
@@ -71,7 +71,7 @@ Build & Push  ──►  Deploy
 
 | Job | What it does |
 |---|---|
-| **Build & Push** | Builds JAR from `app/`, pushes `captcloud01/shopping-cart:<sha>` and `latest` to Docker Hub |
+| **Build & Push** | Builds JAR from `app/`, pushes `captcloud01/mallam-shehu-suya:<sha>` and `latest` to Docker Hub |
 | **Deploy** | Configures kubeconfig via `aws eks update-kubeconfig`, substitutes SHA tag into manifest, deletes and recreates deployment and service, waits for rollout |
 
 ### `cleanup.yml` — Full Teardown (`dev` branch only)
@@ -96,7 +96,7 @@ Guard (dev only)
 
 ### EKS Cluster (`infra/eks/`)
 
-State: `shopping-cart/eks/terraform.tfstate`
+State: `mallam-shehu-suya/eks/terraform.tfstate`
 
 - VPC `10.0.0.0/16` — 3 public subnets (ALB/NAT) + 3 private subnets (nodes) across 3 AZs
 - 3 NAT Gateways for HA egress from private subnets
@@ -105,16 +105,16 @@ State: `shopping-cart/eks/terraform.tfstate`
 
 ### Kubernetes Resources (`infra/`)
 
-State: `shopping-cart/k8s/terraform.tfstate`
+State: `mallam-shehu-suya/k8s/terraform.tfstate`
 
-- **Namespace** `shopping-cart` with pod-security `restricted` enforcement
+- **Namespace** `mallam-shehu-suya` with pod-security `restricted` enforcement
 - **Image pull secret** `dockerhub-credentials` — Docker Hub auth for private pulls
 - **Network policies** — ingress on port 8070 only; egress restricted to DNS (53) and HTTPS (443)
 - **Pod Disruption Budget** — minimum 1 pod available at all times
 
 ### App Deployment (`infra/deploymentservice.yml`)
 
-- 2 replicas in `shopping-cart` namespace
+- 2 replicas in `mallam-shehu-suya` namespace
 - Image tag substituted at deploy time via `sed` — `__TAG__` placeholder replaced with commit SHA
 - Security: `runAsNonRoot`, `allowPrivilegeEscalation: false`, all capabilities dropped, seccomp `RuntimeDefault`
 - Resources: 250m CPU / 256Mi memory request · 500m CPU / 512Mi limit
