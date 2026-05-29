@@ -4,6 +4,6 @@ output "namespace" {
 }
 
 output "image_pull_secret" {
-  description = "Name of the GHCR image pull secret."
-  value       = kubernetes_secret.ghcr_pull.metadata[0].name
+  description = "Name of the Docker Hub image pull secret."
+  value       = kubernetes_secret.dockerhub_pull.metadata[0].name
 }
