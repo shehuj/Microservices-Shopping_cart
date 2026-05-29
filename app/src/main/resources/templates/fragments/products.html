@@ -8,20 +8,11 @@
     <div class="food-card" th:each="product : ${products}">
 
       <div class="food-img">
-        <span th:text="${product.name.contains('Pizza') or product.name.contains('pizza') ? '🍕' :
-                         product.name.contains('Burger') or product.name.contains('burger') ? '🍔' :
-                         product.name.contains('Pasta') or product.name.contains('pasta') ? '🍝' :
-                         product.name.contains('Salad') or product.name.contains('salad') ? '🥗' :
-                         product.name.contains('Ribs') or product.name.contains('BBQ') ? '🍖' :
-                         product.name.contains('Fish') or product.name.contains('fish') ? '🐟' :
-                         product.name.contains('Cake') or product.name.contains('cake') ? '🎂' :
-                         product.name.contains('Smoothie') or product.name.contains('Drink') ? '🥤' :
-                         product.name.contains('Bread') or product.name.contains('bread') ? '🥖' :
-                         product.name.contains('Tiramisu') or product.name.contains('Dessert') ? '🍮' :
+        <span th:text="${product.name.contains('Beef') ? '🥩' :
                          product.name.contains('Chicken') ? '🍗' :
-                         product.name.contains('Sushi') ? '🍣' :
-                         product.name.contains('Taco') ? '🌮' :
-                         product.name.contains('Soup') ? '🍜' : '🍽️'}">🍽️</span>
+                         product.name.contains('Ram') ? '🍖' :
+                         product.name.contains('Kilishi') ? '🥓' :
+                         product.name.contains('Offal') ? '🍢' : '🔥'}">🔥</span>
       </div>
 
       <div class="food-body">
@@ -30,7 +21,8 @@
       </div>
 
       <div class="food-footer">
-        <span class="food-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}">$0.00</span>
+        <span class="food-price" th:text="'₦' + ${#numbers.formatDecimal(product.price, 1, 0)}">₦0</span>
+
         <a th:href="@{'/shoppingCart/addProduct/{id}'(id=${product.id})}"
            sec:authorize="isAuthenticated()"
            th:if="${product.quantity} > 0">
